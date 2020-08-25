@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  hub:
+    image: selenium/hub:3.141.59
+    networks:
+      - grid
+    ports:
+    - "4444:4444"
+
+  firefox:
+    image: selenium/node-firefox-debug:3.141.59
+    ports:
+      - "5900:5900"
+    networks:
+      - grid
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: "hub"
+    volumes:
+      - /dev/shm:/dev/shm
+
+  chrome:
+    image: selenium/node-chrome:3.141.59
+    networks:
+      - grid
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: "hub"
+    volumes:
+      - /dev/shm:/dev/shm
+
+networks:
+    grid:
